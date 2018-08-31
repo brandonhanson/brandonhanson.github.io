@@ -1,0 +1,327 @@
+/*
+
+Theme Name: Toolbox
+
+Theme URI: http://wordpress.org/extend/themes/toolbox
+
+Author: Automattic
+
+Author URI: http://automattic.com/
+
+Description: A semantic, HTML5, canvas for CSS artists and an ultra-minimal set of super-clean templates for your own WordPress theme development.
+
+Version: 1.4
+
+License: GNU General Public License
+
+License URI: license.txt
+
+Tags: custom-menu, sticky-post, microformats, rtl-language-support, translation-ready, full-width-template, post-formats
+
+
+
+This theme, like WordPress, is licensed under the GPL.
+
+Use it to make something cool, have fun, and share what you've learned with others.
+
+*/
+
+
+
+/* =Structure
+
+-------------------------------------------------------------- */
+
+body { 
+
+	font-family: Georgia, serifSansSerifMonospace;
+
+	color: #333;
+
+	background-color: #E8F3F8;
+
+	margin: 0; 
+
+	padding: 0;
+
+	text-align: center;
+
+	overflow-x: hidden;
+
+}
+
+
+
+#primary {
+
+	text-align: center;
+
+}
+
+
+
+.center-content {
+
+	width: 960px;
+
+	margin: 0px auto;
+
+	text-align: left;
+
+}
+
+
+
+/* =Header
+
+-------------------------------------------------------------- */
+
+#site-title {
+
+	font-size: 2em;
+
+	font-weight: bold;
+
+	margin: .67em 0;
+
+}
+
+#site-description {
+
+	font-size: 1em;
+
+	font-weight: normal;
+
+	margin: 0 0 1em;
+
+}
+
+
+
+/* CLEAR FIX*/
+
+.clearfix:after {content: ".";
+
+	display: block;
+
+	height: 0;
+
+	clear: both;
+
+	visibility: hidden;}
+
+.clearfix {display: inline-block;}
+
+/* Hides from IE-mac \*/
+
+* html .clearfix { height: 1%;}
+
+.clearfix {display: block;}
+
+/* End hide from IE-mac */
+
+
+
+#teaching {
+
+	float: left;
+
+	width: 100%;
+
+	padding: 35px 0 45px 0;
+
+	line-height: 25px;
+
+}
+
+
+
+#about {
+
+	float: left;
+
+	width: 100%;
+
+	padding: 35px 0 45px 0;
+
+	line-height: 25px;
+
+}
+
+
+
+#research {
+
+	float: left;
+
+	width: 100%;
+
+	padding: 35px 0 45px 0;
+
+	line-height: 25px;
+
+}
+
+
+
+#contact {
+
+	float: left;
+
+	width: 100%;
+
+	padding: 35px 0 45px 0;
+
+	line-height: 25px;
+
+}
+
+
+
+.italic{
+
+	font-style: italic;
+
+}
+
+
+
+/* fonts */
+
+
+
+@font-face {
+
+	font-family: 'Goudy';
+
+	src:	url('./type/goudy.eot') format('eot'),
+		url('./type/goudy.woff') format('woff'),
+		url('./type/goudy.ttf') format('truetype'),
+		url('./type/goudy.svg') format('svg');
+
+	font-weight: normal;
+
+	font-style: normal;
+
+}
+
+
+
+@font-face {
+
+	font-family: 'Ostrich';
+
+	src:	url('./type/ostrich-black-webfont.eot') format('eot'),
+		url('./type/ostrich-black-webfont.woff') format('woff'),
+		url('./type/ostrich-black-webfont.ttf') format('truetype'),
+		url('./type/ostrich-black-webfont.svg') format('svg');
+
+	font-weight: normal;
+
+	font-style: normal;
+
+}
+
+
+
+.text {
+
+	font-family: Goudy, Georgia, serif;
+
+	margin: 0 0 0 250px;
+
+}
+
+
+
+h1 a {
+
+	font-family: Ostrich, Georgia, serif;
+
+	font-size: 300%;
+
+	color: #81A8B8;
+
+	margin: 15px 20px 15px 50px;
+
+	text-shadow: 1px 1px 0 #C2CBCE; 2px 2px 0 #C2CBCE; 
+
+	text-decoration: none;
+
+}
+
+
+
+h3 {
+
+	float: left;
+
+	font-family: Ostrich, Georgia, serif;
+
+	font-size: 300%;
+
+	color: #81A8B8;
+
+	margin: 20px 35px 20px 35px;
+
+	text-shadow: 1px 1px 0 #C2CBCE; 2px 2px 0 #C2CBCE;
+
+}
+
+
+
+.image {
+
+	float: left;
+
+	box-shadow: 1px 1px 0 #A4BCC2; 2px 2px 0 #A4BCC2;
+
+	padding: 0;
+
+	margin: 0 0 15px 190px;
+
+}
+
+
+
+img {
+
+	padding: 0;
+
+	margin: 0;
+
+	display: block;
+
+}
+
+
+
+ol.address {
+
+	list-style-type: none;
+
+	float: left;
+
+	padding: 0;
+
+	margin: 0 50px 0 0;
+
+}
+
+
+
+a {
+
+	color: #FF0055;
+
+	text-decoration: none;
+
+	cursor: pointer;
+
+}
+
+
+
+.content {
+
+}
