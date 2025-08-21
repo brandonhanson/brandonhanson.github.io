@@ -383,9 +383,12 @@
 .heading-10 {
   color: #e7e7e7;
   margin-top: 0;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
+  margin-bottom: 0;
   font-weight: 400;
+}
+
+#slogan {
+  padding: 0 0 10px 0;
 }
 
 .image-3 {
