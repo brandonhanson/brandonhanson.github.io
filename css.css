@@ -25,6 +25,13 @@
   display: flex;
 }
 
+.w-layout-cell-25 {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: flex;
+}
+
 @media screen and (max-width: 991px) {
   .w-layout-blockcontainer {
     max-width: 728px;
@@ -430,6 +437,11 @@
 #w-node-_990d923b-3c58-5b92-82f0-9a3972ae4361-85ad5cdf {
   grid-template-rows: auto auto auto auto;
   grid-template-columns: 1fr;
+}
+
+#w-node-blah {
+  grid-template-rows: auto;
+  grid-template-columns: 1.25fr 3.25fr;
 }
 
 a {
