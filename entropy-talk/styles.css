@@ -1,0 +1,1900 @@
+/* Foundations and shared layout */
+
+@font-face {
+  font-family: "Manrope";
+  src: url("assets/Manrope.ttf") format("truetype");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+  --paper: #f6f3ed;
+  --ink: #302e2b;
+  --accent: #302e2b;
+  --muted: #625e57;
+  --rule: #d6d0c6;
+  --scene-gap: clamp(24px, 3vw, 48px);
+  --divider-padding: clamp(24px, 2.5vw, 40px);
+  --divider-color: #c9c2b7;
+  --scene-inset: clamp(32px, 4vw, 64px);
+  --plot-size: min(500px, 57svh);
+  font-family: Georgia, serif;
+  font-optical-sizing: auto;
+  background: var(--paper);
+  color: var(--ink);
+  scrollbar-color: var(--muted) var(--paper);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-snap-type: y proximity; }
+
+body {
+  margin: 0;
+  /* Avoid selecting text while clicking or dragging presentation controls. */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+button { font-family: "Manrope", sans-serif; }
+
+button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 6px;
+}
+
+.slide {
+  min-height: 100svh;
+  scroll-snap-align: start;
+}
+
+.slide h1:focus { outline: none; }
+
+.slide h2:focus { outline: none; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.content-panel {
+  display: flex;
+  padding: var(--scene-inset) 124px var(--scene-inset) var(--scene-inset);
+  align-items: center;
+}
+
+.slide-content {
+  width: 100%;
+  margin-inline: auto;
+  line-height: 1.5;
+  max-width: 1280px;
+  font-size: clamp(20px, 1.85vw, 28px);
+}
+
+.slide-content h2 {
+  margin: 0 0 32px;
+  font-size: clamp(36px, 4.4vw, 64px);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -.01em;
+  text-wrap: balance;
+}
+
+.slide-content p {
+  margin-block: 1em;
+  max-width: 62ch;
+}
+
+.slide-content .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: .2em;
+}
+
+.slide-content img { max-width: 100%; }
+
+.slide-content canvas { max-width: 100%; }
+
+.definition-panel { align-items: center; }
+
+.definition-panel .slide-content {
+  width: 100%;
+  min-width: 0;
+  max-width: 1280px;
+  container-type: inline-size;
+}
+
+.definition-panel h2 { margin-bottom: 40px; }
+
+.definition-panel .annotated-entropy { margin-block: 80px 40px; }
+
+.conditional-layout {
+  /* Total visual clearance and the smaller radius expansion used for wrapping. */
+  --conditional-gap: 120px;
+  --conditional-contour-gap: 40px;
+  --conditional-text-offset: max(0px, calc(var(--conditional-gap) - var(--conditional-contour-gap)));
+  display: flow-root;
+  max-width: 1040px;
+  margin-block: 48px;
+  margin-inline: auto;
+  /* Reserve the space the paragraph moves into after its lines are wrapped. */
+  padding-left: var(--conditional-text-offset);
+}
+
+.conditional-layout:has(+ .conditional-layout) { margin-bottom: 0; }
+
+.conditional-layout + .conditional-layout { margin-top: 8px; }
+
+.conditional-layout > p {
+  margin: 0;
+  max-width: none;
+  padding-top: clamp(48px, 7.5cqw, 96px);
+  text-align: right;
+  transform: translateX(calc(0px - var(--conditional-text-offset)));
+}
+
+.conditional-expression {
+  float: right;
+  display: grid;
+  place-items: center;
+  width: min(100%, 450px);
+  aspect-ratio: 1;
+  margin-left: var(--conditional-contour-gap);
+  shape-outside: circle(50%) border-box;
+  shape-margin: var(--conditional-contour-gap);
+  border: 1px solid var(--divider-color);
+  border-radius: 50%;
+  container-type: inline-size;
+}
+
+.conditional-expression-left {
+  float: left;
+  margin-left: 0;
+  margin-right: var(--conditional-contour-gap);
+}
+
+.chain-rule-layout {
+  padding-left: 0;
+  padding-right: var(--conditional-text-offset);
+}
+
+.chain-rule-layout > p {
+  text-align: left;
+  transform: translateX(var(--conditional-text-offset));
+}
+
+.chain-rule-layout .conditional-expression { width: min(100%, 400px); }
+
+.chain-rule-formula {
+  font-size: 40px;
+  text-align: center;
+  overflow: visible;
+  transform: translateX(-1.5em); 
+}
+
+.chain-rule-formula > span { display: block; white-space: nowrap; }
+
+.chain-rule-formula > span:last-child { transform: translateX(5em); }
+
+.conditional-meaning {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  align-items: center;
+  justify-content: center;
+  gap: .5em;
+  font-size: min(32px, 5cqw);
+  line-height: 1.3;
+  transform: translateX(-1.1em); 
+}
+
+.conditional-description {
+  width: max-content;
+  padding-inline: .35em;
+}
+
+.conditional-description > span {
+  display: block;
+  white-space: nowrap;
+  font-size: 20px;
+  font-style: italic;
+}
+.conditional-term { font-size: 40px; }
+.conditional-description > span:nth-child(2) { transform: translateX(2em); }
+.conditional-description > span:nth-child(3) { transform: translateX(1.5em); font-size: 40px; }
+.conditional-description > span:nth-child(4) { transform: translateX(2em); }
+.conditional-description > span:nth-child(5) { transform: translateX(2.5em); font-size: 40px; }
+
+@container (max-width: 760px) {
+  .conditional-layout {
+    --conditional-text-offset: 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .conditional-layout > p { order: -1; padding-top: 0; }
+  .conditional-expression {
+    float: none;
+    margin-inline: auto;
+    shape-outside: none;
+  }
+}
+
+@container (max-width: 420px) {
+  .conditional-meaning {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    font-size: min(24px, 6cqw);
+  }
+}
+
+#conditional-entropy-title { --heading-stagger-range: 1.6; }
+
+.conditional-halvings {
+  margin-block: 24px;
+  font-size: clamp(24px, 3vw, 40px);
+}
+
+.experiment-panel .slide-content { width: 100%; }
+
+.experiment-panel h2 { margin-bottom: 24px; }
+
+/* Title */
+
+.title-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100svh;
+  padding: clamp(28px, 5vw, 88px);
+  padding-right: max(88px, 7vw);
+  overflow: clip;
+}
+
+.title-composition {
+  position: relative;
+  width: 100%;
+  max-width: 1600px;
+  min-height: max(600px, calc(100svh - 180px));
+  margin: 0 auto;
+  padding-block: 0 100px;
+}
+
+h1 {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: clamp(60px, 11.2vw, 180px);
+  line-height: 1.04;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+h1 > span { display: block; }
+
+.title-art {
+  position: absolute;
+  width: 43%;
+  right: -1%;
+  bottom: -12px;
+}
+
+.title-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.title-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-top: 8px;
+}
+
+.title-credit {
+  margin: 0 auto 0 0;
+  max-width: 45ch;
+  color: var(--muted);
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.fullscreen-button {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 2px 10px 14px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-underline-offset: 4px;
+}
+
+.fullscreen-button[hidden] { display: none; }
+
+.fullscreen-button:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+/* Chapter dividers: the three rows share one gap on either side of the rule. */
+
+.chapter-panel {
+  display: grid;
+  place-items: center;
+  padding: clamp(32px, 5vw, 80px) max(64px, 8vw);
+  text-align: center;
+}
+
+.chapter-composition {
+  --chapter-gap: clamp(24px, 4svh, 48px);
+  --chapter-rule-overhang: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: var(--chapter-gap);
+  width: fit-content;
+  max-width: min(100%, 1000px);
+}
+
+.chapter-number {
+  margin: 0;
+  font-size: clamp(140px, 27svh, 300px);
+  font-weight: normal;
+  font-style: normal;
+  font-variant-numeric: lining-nums;
+  line-height: .95;
+}
+
+/* Per-line offsets are fitted to the glyphs by heading-layout.js. */
+[data-heading-lines] > span { display: block; }
+
+.stacked-heading > .heading-line {
+  display: block;
+  width: max-content;
+  max-width: none;
+  margin-top: var(--line-rise, 0px);
+  margin-left: var(--line-offset, 0px);
+  line-height: 1;
+  white-space: pre;
+}
+
+.chapter-rule {
+  width: 100%;
+  height: 1px;
+  background: #b9b1a5;
+}
+
+.chapter-tagline {
+  max-width: 25ch;
+  margin: 0 var(--chapter-rule-overhang);
+  font-size: clamp(28px, 4vw, 56px);
+  font-weight: normal;
+  font-style: italic;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+/* Trim line-box padding so the shared gap is measured from cap height/baseline.
+   https://developer.chrome.com/blog/css-text-box-trim */
+.chapter-number,
+.chapter-tagline {
+  text-box: trim-both cap alphabetic;
+}
+
+/* Section navigation */
+
+.section-navigation {
+  position: fixed;
+  z-index: 5;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--muted);
+  right: 8px;
+}
+
+.section-navigation[hidden] { display: none; }
+
+.section-arrow {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.section-arrow:hover:not(:disabled) { background: #e9e4db; }
+
+.section-arrow:disabled {
+  opacity: .25;
+  cursor: default;
+}
+
+.section-timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+  max-height: 55svh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+}
+
+.section-timeline li { position: relative; }
+
+.section-timeline li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  width: 1px;
+  background: var(--rule);
+  left: 50%;
+  height: 32px;
+  top: 16px;
+}
+
+.timeline-stop {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  height: 32px;
+}
+
+.timeline-stop::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--muted);
+  border-radius: 50%;
+  background: var(--paper);
+  transition: background-color 180ms, box-shadow 180ms;
+}
+
+.timeline-stop[aria-current="step"]::before {
+  background: var(--ink);
+  border-color: var(--ink);
+  box-shadow: 0 0 0 4px var(--paper), 0 0 0 5px var(--muted);
+}
+
+.timeline-stop:hover::before { background: var(--muted); }
+
+.timeline-stop.chapter-stop::before {
+  content: attr(data-chapter-number);
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  color: var(--ink);
+  font: 14px Georgia, serif;
+}
+
+.timeline-stop.chapter-stop[aria-current="step"]::before { color: var(--paper); }
+
+.timeline-stop.chapter-stop:hover::before { color: var(--paper); }
+
+.section-count {
+  font-family: "Manrope", sans-serif;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  padding-bottom: 8px;
+}
+
+.chapter-label {
+  width: 100px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+
+.timeline-label {
+  width: max-content;
+  max-width: 260px;
+  padding: 8px 12px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  font-size: 13px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  position: fixed;
+  right: 108px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.timeline-stop:hover .timeline-label {
+  opacity: 1;
+  visibility: visible;
+}
+
+.timeline-stop:focus-visible .timeline-label {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Entropy: portraits, definitions, and population experiments */
+
+.guess-who-illustration {
+  width: min(86%, 900px);
+  margin: 56px 3% 12px auto;
+}
+
+.guess-who-illustration img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+#binary-interactive-title { text-align: center; }
+
+.entropy-demo {
+  display: grid;
+  align-items: center;
+  max-width: 1200px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr) minmax(0, 1fr);
+  gap: var(--scene-gap);
+  margin: 32px auto 0;
+}
+
+.population-tracker {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto auto;
+  align-items: stretch;
+  gap: 12px clamp(32px, 5vw, 80px);
+  padding-top: 24px;
+  line-height: 1.4;
+  font-size: 19px;
+}
+
+.population-readout {
+  display: grid;
+  grid-row: span 2;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: subgrid;
+  align-items: end;
+  justify-items: center;
+  row-gap: 12px;
+  text-align: center;
+}
+
+.readout-unit {
+  display: block;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+#remaining-label { max-width: 32ch; }
+
+#question-entropy,
+#expected-population,
+#ternary-entropy {
+  display: block;
+  width: 6ch;
+  font-variant-numeric: lining-nums tabular-nums;
+  line-height: 1.1;
+  font-size: 56px;
+  margin-top: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.remaining-unit {
+  color: var(--muted);
+  max-width: 8ch;
+}
+
+.remaining-formula {
+  margin: 0;
+  font-size: 16px;
+}
+
+.entropy-demo > .blue-population { grid-column: 1; grid-row: 1; }
+.entropy-demo > .brown-population { grid-column: 3; grid-row: 1; }
+
+.eye-population {
+  text-align: center;
+  font-size: 19px;
+}
+
+.eye-population output {
+  display: block;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  margin-top: 4px;
+  font-size: .94em;
+}
+
+.eye-population svg {
+  display: block;
+  width: 100%;
+  max-height: min(190px, 22svh);
+}
+
+.brown,
+.brown-population { color: #835b3f; }
+
+.blue,
+.blue-population { color: #416f91; }
+
+.eye-population circle { fill: currentColor; }
+
+.entropy-plot {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+  font-size: 21px;
+}
+
+.entropy-plot-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.entropy-plot output {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.entropy-plot svg {
+  display: block;
+  width: 100%;
+  margin: 12px 0;
+  overflow: visible;
+}
+
+.entropy-plot svg text {
+  fill: var(--muted);
+  font-size: 22px;
+  font-family: Georgia, serif;
+}
+
+.plot-axis {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+
+.plot-guide {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+  opacity: .5;
+}
+
+#entropy-curve {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+#entropy-marker {
+  fill: var(--ink);
+  stroke: var(--paper);
+  stroke-width: 2;
+}
+
+.annotated-entropy {
+  margin: 72px 0;
+  font-size: clamp(18px, 2.2vw, 34px);
+}
+
+.annotated-entropy .katex-display { padding-block: 20px; }
+
+#binary-formula {
+  /* Leave room for the zero-width descriptions beyond the formula's ends. */
+  font-size: min(clamp(18px, 2.2vw, 34px), 3.2cqw);
+}
+
+#binary-formula .katex-display {
+  overflow: visible;
+}
+
+#binary-formula .formula-term-hidden,
+#binary-formula .formula-term-revealed .katex-stretchy,
+#binary-formula .formula-term-revealed .math-annotation {
+  visibility: hidden;
+}
+
+/* The invisible height reserve must not add horizontal overflow. */
+#binary-formula .katex-html > .katex-base:first-child > .mord.rlap {
+  overflow: clip;
+}
+
+.math-annotation {
+  opacity: .5;
+  transform: scale(.7);
+  transform-origin: left center;
+}
+
+.math-annotation .text {
+  font-family: Georgia, serif;
+  font-style: italic;
+}
+
+.annotated-entropy .katex-stretchy {
+  opacity: .5;
+  transform: scaleY(.7);
+  transform-origin: center;
+}
+
+.formula-steps {
+  width: min(480px, 100%);
+  margin: 0 auto;
+}
+
+.formula-steps input {
+  display: block;
+  width: 100%;
+  height: 44px;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.formula-steps input::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--rule);
+}
+
+.formula-steps input::-moz-range-track {
+  height: 2px;
+  background: var(--rule);
+}
+
+.formula-steps input::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -8px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper);
+}
+
+.formula-steps input::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper);
+}
+
+.formula-steps input:focus-visible {
+  outline: 1px solid var(--muted);
+  outline-offset: 4px;
+}
+
+.formula-step-ticks {
+  display: flex;
+  justify-content: space-between;
+  padding-inline: 9px;
+  font: 13px "Manrope", sans-serif;
+  color: var(--muted);
+}
+
+.formula-step-ticks [aria-current="step"] { color: var(--ink); font-weight: 700; }
+
+.ternary-content { width: 100%; max-width: 1600px; container-type: inline-size; }
+
+#ternary-interactive { padding-block: clamp(20px, 3svh, 40px); }
+
+#ternary-title { text-align: center; margin-bottom: 8px; }
+
+.ternary-demo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  column-gap: clamp(32px, 4vw, 64px);
+  row-gap: 8px;
+  margin: 0 auto;
+}
+
+.ternary-histogram {
+  width: min(100%, 230px);
+  height: clamp(90px, 12svh, 120px);
+  margin: 0 auto;
+}
+
+.ternary-calculation { grid-column: 1 / -1; grid-row: 1; min-width: 0; display: grid; justify-items: center; gap: 6px; }
+
+.ternary-calculation-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  max-width: 100%;
+  font-size: clamp(22px, 2.2cqw, 30px);
+}
+
+.ternary-substitution { max-width: 100%; font-size: inherit; }
+
+.ternary-substitution .katex { white-space: normal; }
+
+.ternary-entropy-result { display: flex; align-items: baseline; justify-content: center; gap: 12px; }
+
+.ternary-entropy-result #ternary-entropy { width: 4ch; font-size: 1.15em; }
+
+#ternary-histogram { display: block; width: 100%; height: 100%; overflow: visible; }
+
+.ternary-stage {
+  grid-column: 1;
+  grid-row: 2;
+  position: relative;
+  /* Budget for the title and calculation before sizing the graph to the viewport. */
+  width: min(100%, 1050px, max(280px, calc((100svh - 340px) * 1.265823)));
+  aspect-ratio: 1000 / 790;
+  margin-inline: auto;
+}
+
+#ternary-surface {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+#ternary-surface text {
+  font-size: 22px;
+  font-family: Georgia, serif;
+  fill: var(--muted);
+}
+
+.ternary-population {
+  position: absolute;
+  left: var(--swarm-x);
+  top: var(--swarm-y);
+  width: 24%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.ternary-population svg { max-height: none; }
+
+.green-population { color: #55734d; }
+
+#binary-entropy-plot {
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.folio-panel {
+  --folio-content-width: min(1280px, calc(100% - var(--scene-inset) - 124px));
+  --folio-rule-inset: max(50px, calc(var(--folio-content-width) * .11 - 20px));
+  position: relative;
+  isolation: isolate;
+}
+
+.folio-panel::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset-block: 0;
+  left: 0;
+  /* Balance the gap while retaining overlap over the book's cropped left edge. */
+  width: calc((100% + var(--scene-inset) - 124px - var(--folio-content-width)) / 2 + var(--folio-content-width) * .76 - var(--folio-rule-inset) + 1px);
+  background: var(--paper);
+  border-right: 1px solid var(--divider-color);
+  pointer-events: none;
+}
+
+.folio-panel .slide-content {
+  /* Percentages resolve against the content width on either side. */
+  --folio-column-edge: calc(76% - max(50px, calc(11% - 20px)));
+  --folio-text-width: calc(var(--folio-column-edge) - var(--divider-padding));
+  position: relative;
+  max-width: 1280px;
+  /* Preserve the 36%-wide, 2:3 portrait's scale as the heading becomes tighter. */
+  min-height: calc(min(1280px, 100vw - var(--scene-inset) - 124px) * .36 * 1.5);
+}
+
+.folio-panel .folio-title {
+  position: relative;
+  z-index: 2;
+  width: var(--folio-text-width);
+  margin: 0;
+  font-size: clamp(64px, 8vw, 128px);
+  line-height: 1.05;
+}
+
+.folio-panel .folio-copy {
+  position: relative;
+  z-index: 2;
+  width: var(--folio-text-width);
+  margin-block: 40px;
+  text-align: right;
+}
+
+.folio-portrait-window {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  clip-path: inset(0 0 0 calc(var(--folio-column-edge) + 1px + var(--divider-padding)));
+  pointer-events: none;
+}
+
+.folio-portrait {
+  position: absolute;
+  display: block;
+  right: 0;
+  bottom: 0;
+  width: 36%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: right bottom;
+}
+
+.question-panel .slide-content h2 {
+  max-width: 23ch;
+  margin: 0 auto;
+  font-size: clamp(36px, 5.4vw, 84px);
+  line-height: 1.25;
+  font-style: italic;
+  text-align: center;
+}
+
+.illustration-panel p { max-width: 47ch; }
+
+.illustration-panel .guess-who-illustration {
+  width: min(86%, 900px);
+  margin: 48px 0 0 auto;
+}
+
+#eye-colour-intro {
+  --guess-who-content-width: min(1280px, calc(100% - var(--scene-inset) - 124px));
+  --guess-who-column-gap: calc(2 * var(--divider-padding) + 1px);
+  --guess-who-image-share: .46;
+  position: relative;
+}
+
+#eye-colour-intro::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  /* Center the rule in the gap between the two unequal columns. */
+  left: calc((100% + var(--scene-inset) - 124px - var(--guess-who-content-width)) / 2 + (var(--guess-who-content-width) - var(--guess-who-column-gap)) * var(--guess-who-image-share) + var(--divider-padding));
+  width: 1px;
+  background: var(--divider-color);
+  pointer-events: none;
+}
+
+.guess-who-layout {
+  display: grid;
+  grid-template-columns: minmax(0, calc((100% - var(--guess-who-column-gap)) * var(--guess-who-image-share))) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--scene-gap);
+  column-gap: var(--guess-who-column-gap);
+}
+
+.illustration-panel .guess-who-layout .guess-who-illustration {
+  width: 100%;
+  max-width: var(--plot-size);
+  justify-self: center;
+  margin: 0;
+}
+
+.guess-who-copy h2 + p { margin-top: 0; }
+
+.aligned-definitions {
+  display: grid;
+  grid-template-columns: max-content max-content minmax(0, 1fr);
+  align-items: baseline;
+  gap: .35em .5em;
+}
+
+.definition-symbol { text-align: right; }
+
+/* Noise simulations and the entropy power inequality */
+
+.observation-content { text-align: center; }
+
+.observation-content h2 { margin-bottom: 16px; }
+
+.observation-content p { margin: 0 auto 20px; }
+
+#observation-samples {
+  display: block;
+  width: min(100%, 1100px, max(280px, calc((100svh - 300px) * 1.157)));
+  height: auto;
+  margin-inline: auto;
+}
+
+.silhouette-content {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 24px;
+}
+
+.silhouette-pair {
+  display: grid;
+  position: relative;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  column-gap: 96px;
+  row-gap: 24px;
+  width: min(100%, 920px);
+  max-width: 1250px;
+  margin: 32px auto 0;
+}
+
+.silhouette-pair figure { margin: 0; }
+
+.silhouette-pair figcaption {
+  text-align: center;
+  margin-bottom: 4px;
+  font-size: 21px;
+}
+
+.silhouette-pair canvas {
+  display: block;
+  height: auto;
+  max-width: 540px;
+  margin-inline: auto;
+  width: min(100%, 360px, calc((100svh - 350px) * .5787));
+}
+
+.silhouette-pair figure:nth-child(1) {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.silhouette-pair figure:nth-child(2) {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.silhouette-pair figure:nth-child(3) {
+  grid-column: 2;
+  grid-row: 1 / 3;
+}
+
+/* Compact signal/noise composition, with the explanation above the plots. */
+:is(#noise-sampling, #horizontal-comparison) .silhouette-content { grid-template-columns: minmax(0, 1fr); }
+:is(#noise-sampling, #horizontal-comparison) .silhouette-content > p {
+  grid-row: 2;
+  margin: 14px 0 0;
+  max-width: 76ch;
+}
+:is(#noise-sampling, #horizontal-comparison) .silhouette-pair {
+  grid-row: 3;
+  column-gap: 40px;
+  row-gap: 16px;
+  width: min(100%, 1040px, calc((100svh - 340px) * 1.1574 + 40px));
+  margin-top: 16px;
+}
+:is(#noise-sampling, #horizontal-comparison) .silhouette-pair canvas { width: 100%; }
+:is(#noise-sampling, #horizontal-comparison) .silhouette-pair figure:first-child::after { bottom: -24px; }
+@media (max-width: 760px) {
+  :is(#noise-sampling, #horizontal-comparison) .silhouette-pair { width: 100%; row-gap: 24px; }
+}
+
+.epi-content { width: 100%; }
+
+.epi-bound {
+  margin: 48px 0;
+  font-size: clamp(22px, 2.5vw, 36px);
+}
+
+/* Keep the border circular even when the larger text extends beyond it. */
+.dimension-callout {
+  color: #795585;
+  width: min(300px, 100%);
+  container-type: inline-size;
+  position: relative;
+  overflow: visible;
+  padding-block: 24px;
+  margin: 8px 62px 0 auto;
+  text-align: center;
+}
+
+.dimension-callout::before {
+  content: '';
+  position: absolute;
+  width: 90%;
+  aspect-ratio: 1;
+  top: 50%;
+  left: 5%;
+  transform: translateY(-50%);
+  border: 1px solid var(--divider-color);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.dimension-callout h3,
+.dimension-callout p {
+  width: calc(100% + 64px);
+  max-width: none;
+  margin-left: -32px;
+  text-wrap: balance;
+}
+
+.dimension-callout h3 {
+  margin-block: 0 12px;
+  font-size: 12cqw;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1.25;
+}
+
+.dimension-callout h3 em {
+  font-style: italic;
+  font-size: 1.12em;
+}
+
+.dimension-callout p {
+  margin-block: 0;
+  font-size: 8.2cqw;
+  line-height: 1.4;
+}
+
+#conditional-epi .epi-content > p { margin-block: 16px; }
+#conditional-epi .epi-bound { margin-block: 24px; }
+#conditional-epi-title { margin-bottom: 24px; }
+
+#discrete-dimension .epi-bound { margin-block: 28px; }
+
+#discrete-dimension p { font-size: .9em; }
+
+.silhouette-content h2 {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+}
+
+.silhouette-pair::after {
+  content: '=';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  font-size: 36px;
+  color: var(--muted);
+}
+
+.silhouette-pair figure:first-child { position: relative; }
+
+.silhouette-pair figure:first-child::after {
+  content: '+';
+  position: absolute;
+  bottom: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 28px;
+  color: var(--muted);
+}
+
+.slide-content .noise-entropy-note {
+  color: var(--muted);
+  grid-column: 1 / -1;
+  grid-row: 3;
+  margin: 24px auto 0;
+  max-width: 84ch;
+  font-size: 16px;
+}
+
+/* Boolean story and theorem */
+
+.story-detail {
+  font-size: .8em;
+  color: var(--muted);
+}
+
+.collision-equation {
+  font-size: clamp(36px, 5vw, 68px);
+  margin: 32px 0;
+}
+
+.boolean-bound { font-size: clamp(24px, 3vw, 44px); }
+
+.proof-detail {
+  margin-top: 24px;
+  font-size: 18px;
+  color: var(--muted);
+}
+
+.proof-detail summary {
+  cursor: pointer;
+  padding-block: 12px;
+}
+
+.proof-detail summary:hover { color: var(--ink); }
+
+.proof-detail p { max-width: 72ch; }
+
+.slide-content .boolean-takeaway {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+}
+
+/* Three cubes and probability equalizers */
+
+.cube-demo-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(28px, 3vw, 44px);
+}
+
+.cube-average-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 32px);
+}
+
+.cube-average-grid > div { min-width: 0; }
+
+.cube-average-grid h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: normal;
+  text-align: center;
+}
+
+.cube-entropy-gauge {
+  display: block;
+  width: 100%;
+  max-width: 240px;
+  height: clamp(110px, 15svh, 145px);
+  margin: 6px auto 4px;
+  overflow: visible;
+}
+
+.cube-entropy-gauge text {
+  font: 13px Georgia, serif;
+  fill: var(--muted);
+}
+
+.cube-entropy-gauge .entropy-gauge-value {
+  font-size: 22px;
+  fill: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.probability-cube {
+  display: block;
+  width: 100%;
+  max-height: 31svh;
+  overflow: visible;
+}
+
+.cube-equalizer {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 4px;
+  margin: 16px 0 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.cube-channel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  gap: 6px;
+}
+
+.cube-channel input {
+  appearance: none;
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 100%;
+  max-width: 40px;
+  height: 116px;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  accent-color: var(--vertex-color);
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+.cube-channel input::-webkit-slider-runnable-track {
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(to top, var(--vertex-color) 0 var(--probability, 12.5%), var(--rule) var(--probability, 12.5%) 100%);
+  border-radius: 0;
+}
+
+.cube-channel input::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 8px;
+  margin-left: -8.5px;
+  border: 1px solid var(--vertex-color);
+  border-radius: 2px;
+  background: var(--vertex-color);
+}
+
+.cube-channel input::-moz-range-track {
+  width: 3px;
+  background: var(--rule);
+}
+
+.cube-channel input::-moz-range-progress {
+  width: 3px;
+  background: var(--vertex-color);
+}
+
+.cube-channel input::-moz-range-thumb {
+  width: 20px;
+  height: 7px;
+  border: 1px solid var(--vertex-color);
+  border-radius: 2px;
+  background: var(--vertex-color);
+}
+
+.cube-uniform {
+  display: block;
+  min-height: 44px;
+  margin: 16px auto 0;
+  padding: 8px 12px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.cube-uniform:hover { background: #e9e4db; }
+
+.cube-average-content .cube-sample-count {
+  margin: 32px 0 16px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.cube-sample-count output { font-variant-numeric: tabular-nums; }
+
+.cube-explanation {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.cube-explanation p { margin: 0; }
+
+/* Bernoulli inequality exploration */
+
+.vector-reduction {
+  margin-top: 32px;
+  max-width: 65ch;
+}
+
+#bernoulli-proof > .slide-content { container-type: inline-size; }
+.gap-formula {
+  font-size: min(clamp(19px, 2vw, 28px), 4.3cqw);
+  text-align: center;
+  overflow: visible;
+  padding-block: 8px;
+}
+
+
+.bernoulli-demo {
+  display: grid;
+  grid-template-columns: minmax(0, 660px) minmax(230px, 300px);
+  align-items: center;
+  gap: var(--scene-gap);
+  margin-top: 24px;
+}
+
+.bernoulli-figure { margin: 0; }
+
+#bernoulli-surface {
+  display: block;
+  width: 100%;
+  max-height: 54svh;
+  touch-action: none;
+  cursor: crosshair;
+  overflow: visible;
+}
+
+#bernoulli-surface text { font: 19px Georgia, serif; }
+
+.bernoulli-figure figcaption {
+  text-align: center;
+  font-size: 16px;
+  color: var(--muted);
+}
+
+.bernoulli-readout { font-size: 19px; }
+
+.bernoulli-probabilities {
+  display: flex;
+  gap: 32px;
+  font-size: 25px;
+  margin-bottom: 24px;
+}
+
+.bernoulli-readout output { font-variant-numeric: tabular-nums; }
+
+.bernoulli-measure { margin-bottom: 24px; }
+
+.bernoulli-measure > span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.bernoulli-measure > output {
+  display: block;
+  margin-block: 8px;
+  font-size: 24px;
+}
+
+.comparison-track {
+  height: 7px;
+  background: #e5dfd5;
+}
+
+.comparison-track span {
+  display: block;
+  height: 100%;
+  background: #416f91;
+}
+
+.bound-track span { background: #835b3f; }
+
+.bernoulli-gap {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid var(--rule);
+  padding-top: 20px;
+}
+
+.slide-content .bernoulli-intro {
+  font-size: .8em;
+  margin-block: 0 16px;
+}
+
+.slide-content .bernoulli-scale {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 0;
+}
+
+/* Littlewood, equality cases, and stability */
+
+#littlewood::before { display: none; }
+
+#littlewood .slide-content {
+  --folio-text-width: 60%;
+  min-height: 0;
+}
+
+.littlewood-body {
+  --portrait-overlap: clamp(96px, 10vw, 144px);
+  position: relative;
+  display: flow-root;
+  margin-top: calc(-1 * var(--portrait-overlap));
+}
+
+.littlewood-quotation {
+  margin: 0;
+  padding-top: calc(var(--portrait-overlap) + 40px);
+  text-align: right;
+}
+
+.littlewood-quotation blockquote {
+  margin: 0;
+  max-width: none;
+  font-size: clamp(26px, 2.65vw, 42px);
+  line-height: 1.42;
+  font-style: italic;
+}
+
+.littlewood-quotation figcaption {
+  margin-top: 28px;
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.littlewood-quotation a {
+  color: var(--muted);
+  font-size: 14px;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.littlewood-portrait {
+  float: right;
+  display: block;
+  width: 42%;
+  height: auto;
+  margin: 0;
+  /* Left contour sampled from this portrait's alpha channel, top to bottom. */
+  shape-outside: polygon(
+    100% 0%, 100% 3.5%, 35.3% 6.9%, 29.6% 10.4%,
+    26.8% 13.9%, 24.8% 17.4%, 23.4% 20.8%, 22.3% 24.3%,
+    22.2% 27.8%, 23.7% 31.2%, 23.7% 34.7%, 24.8% 38.2%,
+    26.6% 41.6%, 32.4% 45.1%, 32.7% 48.6%, 29.6% 52.1%,
+    21.2% 55.5%, 12% 59%, 3.9% 62.5%, 2.9% 65.9%,
+    3.5% 69.4%, 4.4% 72.9%, 5.3% 76.4%, 7.4% 79.8%,
+    10.9% 83.3%, 14.2% 86.8%, 21.2% 90.2%, 33% 93.7%,
+    100% 97.2%, 100% 100%
+  );
+  shape-margin: clamp(20px, 2vw, 32px);
+  mix-blend-mode: multiply;
+}
+
+.extremizer-example { margin: 36px 0; }
+
+.extremizer-vector { font-size: clamp(24px, 3.5vw, 46px); }
+
+.extremizer-example figcaption {
+  margin-top: 16px;
+  font-size: clamp(17px, 1.5vw, 21px);
+  color: var(--muted);
+  text-align: center;
+}
+
+.stability-question {
+  margin-block: 40px;
+  padding-top: 28px;
+  border-top: 1px solid var(--rule);
+}
+
+.stability-question h3 {
+  font-size: .8em;
+  font-weight: normal;
+  color: var(--muted);
+  margin: 0 0 16px;
+}
+
+.stability-question p {
+  font-size: clamp(27px, 3vw, 42px);
+  line-height: 1.35;
+  max-width: 38ch;
+  margin: 0;
+}
+
+/* Responsive layouts, reduced motion, and print */
+
+@media (max-width: 760px) {
+  #eye-colour-intro::before { display: none; }
+  .guess-who-layout { grid-template-columns: minmax(0, 1fr); }
+  .littlewood-body { margin-top: 24px; }
+  .littlewood-quotation { padding-top: 0; }
+  .littlewood-portrait {
+    float: none;
+    width: min(80%, 340px);
+    margin: 0 auto 24px;
+    shape-outside: none;
+  }
+  .guess-who-illustration {
+    width: 100%;
+    margin: 36px 0 0;
+  }
+  .section-navigation { right: 4px; }
+  .title-panel { padding-right: 62px; }
+  .content-panel { padding: 40px 64px 40px 24px; }
+  .title-composition {
+    min-height: max(480px, calc(100svh - 144px));
+    padding-block: 30px 0;
+  }
+  h1 {
+    font-size: clamp(28px, 9.4vw, 72px);
+    line-height: 1.07;
+  }
+  .title-art {
+    width: 90%;
+    max-width: 400px;
+    right: -2%;
+    bottom: 20px;
+  }
+  .entropy-demo {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+  .entropy-demo > .blue-population { grid-column: 1; grid-row: 1; }
+  .entropy-demo > .brown-population { grid-column: 1; grid-row: 3; }
+  .population-tracker {
+    grid-column: 1;
+    grid-row: 4;
+    grid-template-columns: minmax(0, 1fr);
+    text-align: center;
+  }
+  .population-readout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    justify-items: center;
+  }
+  #question-entropy,
+  #expected-population { text-align: center; }
+  .eye-population svg {
+    max-width: 340px;
+    margin-inline: auto;
+  }
+  .annotated-entropy { margin: 40px 0; }
+  .ternary-population { font-size: 14px; }
+  .folio-panel::before { display: none; }
+  .folio-panel .slide-content { min-height: 0; }
+  .folio-panel .folio-title {
+    width: 100%;
+    font-size: clamp(40px, 9vw, 64px);
+  }
+  .folio-panel .folio-copy {
+    width: 100%;
+    margin-block: 32px;
+  }
+  .folio-portrait-window {
+    position: relative;
+    z-index: auto;
+    inset: auto;
+    width: min(100%, 340px);
+    aspect-ratio: 1;
+    margin-inline: auto;
+    overflow: hidden;
+    clip-path: none;
+  }
+  .folio-portrait {
+    position: static;
+    width: 100%;
+    max-height: none;
+  }
+  .silhouette-pair {
+    order: 2;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .silhouette-pair figure:nth-child(n) {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .dimension-callout { margin-inline: auto; }
+  .slide-content h2 { font-size: clamp(30px, 7vw, 44px); }
+  .chapter-label { display: none; }
+  .timeline-label { display: none; }
+  .illustration-panel .guess-who-illustration {
+    width: 100%;
+    margin-top: 32px;
+  }
+  .entropy-plot {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 17px;
+  }
+  .eye-population { font-size: 17px; }
+  .silhouette-content {
+    display: flex;
+    flex-direction: column;
+  }
+  .silhouette-pair canvas { width: 100%; }
+  .silhouette-pair::after { display: none; }
+  .silhouette-pair figure:first-child::after { display: none; }
+  .cube-average-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 44px;
+  }
+  .probability-cube { max-height: 330px; }
+  .bernoulli-demo { grid-template-columns: minmax(0, 1fr); }
+  #bernoulli-surface { max-height: none; }
+  .bernoulli-readout { font-size: 18px; }
+  .bernoulli-probabilities { justify-content: space-between; }
+  .proof-detail { font-size: 16px; }
+  .slide-content .noise-entropy-note { order: 3; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-stop::before { transition: none; }
+}
+
+@media (max-height: 540px) and (min-width: 761px) {
+  .title-panel { padding-block: 24px; }
+  .title-composition {
+    min-height: calc(100svh - 108px);
+    padding-block: 0;
+  }
+  .title-art {
+    width: 33%;
+    bottom: 0;
+  }
+  h1 { font-size: min(11.2vw, 22vh); }
+}
+
+@media print {
+  html { scroll-snap-type: none; }
+  @page {
+    size: landscape;
+    margin: 0;
+  }
+  .title-panel {
+    min-height: 100vh;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .fullscreen-button { display: none; }
+  .section-navigation { display: none; }
+  .slide { break-after: page; }
+}
+
+@media (min-width: 761px) and (max-width: 1150px) {
+  .silhouette-content { grid-template-columns: 1fr; }
+  .silhouette-pair { grid-row: 2; }
+  .slide-content .noise-entropy-note { grid-row: 3; }
+}
+
+@media (max-height: 700px) and (min-width: 761px) {
+  .section-timeline { margin-block: 4px; }
+  .content-panel { padding-block: 24px; }
+}
+
+@media (max-width: 1150px) {
+  .cube-demo-layout { grid-template-columns: minmax(0, 1fr); }
+  .cube-explanation { max-width: 65ch; }
+}
+
+@media (max-width: 1050px) and (min-width: 761px) {
+  .cube-average-grid { gap: 16px; }
+}
+
+@media (min-height: 900px) {
+  .timeline-stop { height: 36px; }
+  .section-timeline li:not(:last-child)::after {
+    height: 36px;
+    top: 18px;
+  }
+}
+
+/* Reserved geometry keeps each step still while the EPI is revealed. */
+.epi-sequence {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .22em;
+  flex-wrap: nowrap;
+}
+#conditional-epi.epi-reveal-ready .epi-reveal { opacity: 0; }
+#conditional-epi.epi-reveal-ready.epi-reveal-active .epi-reveal {
+  animation: epi-appear 700ms ease-out both;
+  animation-delay: calc(1000ms + var(--reveal-step) * 1200ms);
+}
+@keyframes epi-appear {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #conditional-epi.epi-reveal-ready .epi-reveal {
+    opacity: 1;
+    animation: none;
+  }
+}
+@media print {
+  #conditional-epi.epi-reveal-ready .epi-reveal {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+#discrete-dimension .data-curve-illustration {
+  display: block;
+  width: min(100%, 1000px, max(320px, calc((100svh - 300px) * 1.5)));
+  height: auto;
+  margin: 16px auto 0;
+}
+
+.rotatable-noise { position: relative; }
+#noise-angle-guide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: grab;
+  color: #835b3f;
+}
+#noise-angle-guide:focus:not(:focus-visible) { outline: none; }
+#noise-angle-guide { -webkit-tap-highlight-color: transparent; }
+#noise-angle-guide:active { cursor: grabbing; }
+#noise-angle-guide text {
+  fill: currentColor;
+  font: italic 24px Georgia, serif;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.kids-story-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 80px);
+}
+.voting-card-illustration {
+  display: block;
+  width: 100%;
+  max-height: min(620px, 72svh);
+  object-fit: contain;
+}
+@media (max-width: 760px) {
+  .kids-story-layout { grid-template-columns: minmax(0, 1fr); }
+  .voting-card-illustration { max-height: 420px; }
+}
+
+.boolean-tree-diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 24px auto 0;
+}
+#boolean-cube-definition .epi-bound { margin-block: 20px 0; }
+
+.bernoulli-graphs { display: grid; gap: 12px; }
+.bernoulli-graphs figure { margin: 0; }
+.bernoulli-graphs figcaption { text-align: center; font-size: 20px; }
+.bernoulli-graphs svg { display: block; width: 100%; overflow: visible; }
+.bernoulli-graphs svg text { font: 13px Georgia, serif; }
+.bernoulli-graphs svg text[font-style="italic"] { font-style: italic; }
+
+.bernoulli-axis-readout { font-variant-numeric: tabular-nums; }
+
+.littlewood-attribution {
+  display: inline-block;
+  text-align: center;
+}
+
+.slide-content .simulation-return {
+  max-width: none;
+  margin-top: 40px;
+  text-align: center;
+  font-style: italic;
+}
+.simulation-return a {
+  color: #795585;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .2em;
+}

@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f3ed">
+  <title>Entropy, addition, and denoising</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="assets/katex/katex.min.css">
+  <script src="assets/katex/katex.min.js" defer></script>
+  <script src="assets/katex/contrib/auto-render.min.js" defer></script>
+  <script src="binary-formula.js" defer></script>
+  <script src="poster.js" defer></script>
+  <script src="epi-reveal.js" defer></script>
+  <script src="heading-layout.js" defer></script>
+  <script src="entropy-demo.js" defer></script>
+  <script src="ternary-demo.js" defer></script>
+  <script src="assets/blue-jays-mask.js" defer></script>
+  <script src="silhouette-demo.js" defer></script>
+  <script src="bernoulli-demo.js" defer></script>
+  <script src="cube-average-demo.js" defer></script>
+</head>
+<body>
+  <main id="poster">
+    <section class="slide title-panel" id="title" data-title="Title" aria-labelledby="talk-title">
+      <div class="title-composition">
+        <h1 id="talk-title"><span>Entropy,</span> <span>addition, and</span> <span>hearing through the noise</span></h1>
+        <div class="title-art" aria-hidden="true">
+          <img src="assets/title-cube-midpoint-engraved.png" alt="" width="1448" height="1086">
+        </div>
+      </div>
+      <footer class="title-footer">
+        <p class="title-credit">An account of joint work with Ethan Waterhouse.</p>
+        <button class="fullscreen-button" type="button" hidden>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 3H3V8M16 3H21V8M21 16V21H16M8 21H3V16"/></svg>
+          <span>Present fullscreen</span>
+        </button>
+        <span id="presentation-status" role="status" class="visually-hidden"></span>
+      </footer>
+    </section>
+    <section class="slide chapter-panel" id="chapter-entropy" data-title="1 — In Claude we trust" data-chapter="Entropy" data-chapter-number="1" aria-labelledby="chapter-entropy-title">
+      <div class="chapter-composition">
+        <div class="chapter-number" aria-hidden="true">1</div>
+        <span class="chapter-rule" aria-hidden="true"></span>
+        <h2 id="chapter-entropy-title" class="chapter-tagline"><span class="visually-hidden">Chapter 1: </span>In Claude we trust</h2>
+      </div>
+    </section>
+    <section class="slide content-panel folio-panel" id="entropy" data-title="Shannon entropy" aria-labelledby="entropy-title">
+      <div class="slide-content">
+        <h2 id="entropy-title" class="folio-title">Shannon entropy</h2>
+        <p class="folio-copy">In 1948, Claude Shannon produced <i>A Mathematical Theory of Communication</i> and introduced the notion of (Shannon) <b>entropy</b>, which measures the uncertainty involved in predicting a random event.</p>
+        <p class="folio-copy">Shannon's key insight was that <b>information is measured by the uncertainty it resolves</b>. We can measure this by asking:</p>
+        <div class="folio-portrait-window">
+          <img class="folio-portrait" src="assets/shannon-engraved-restored.png" alt="Engraved portrait of Claude Shannon.">
+        </div>
+      </div>
+    </section>
+    <section class="slide content-panel question-panel" id="entropy-question" data-title="Information and uncertainty" aria-labelledby="entropy-question-title">
+      <div class="slide-content">
+        <h2 id="entropy-question-title">How much does knowing the value of  \(\ Y\) help me narrow my search for \(X\)?</h2>
+      </div>
+    </section>
+    <section class="slide content-panel illustration-panel" id="eye-colour-intro" data-title="Entropy helps you strategize" aria-labelledby="eye-colour-intro-title">
+      <div class="slide-content">
+        <div class="guess-who-layout">
+          <figure class="guess-who-illustration">
+            <img src="assets/guess-who-engraved.png" alt="Engraved textbook-style drawing of a Guess Who board, with eight portrait cards upright and four folded down.">
+          </figure>
+          <div class="guess-who-copy">
+            <h2 id="eye-colour-intro-title">Entropy helps you strategize.</h2>
+            <p>For example, suppose we are trying to identify a mystery member, call that person \(X\), of a given population. We might like to know how helpful it would be to know \(X\)'s eye colour, let's call that \(Y\).</p>
+            <p>For simplicity, let's say \(Y\) can be one of <span class="brown">brown</span> or <span class="blue">blue</span>. The effectiveness of this information depends on the relative population sizes of each observable value. So we track those:</p>
+            <div class="aligned-definitions">
+              <span class="definition-symbol brown">\(p\)</span>
+              <span>=</span>
+              <span>fraction of population with <span class="brown">brown</span> eyes</span>
+              <span class="definition-symbol blue">\(1-p\)</span>
+              <span>=</span>
+              <span>fraction of population with <span class="blue">blue</span> eyes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="slide content-panel experiment-panel" id="binary-interactive" data-title="Exploring binary entropy" aria-labelledby="binary-interactive-title">
+      <div class="slide-content">
+        <h2 id="binary-interactive-title">How good is the question?</h2>
+        <div class="entropy-demo" aria-label="Eye colour populations and binary entropy">
+          <div class="eye-population blue-population">
+            <output id="blue-ratio" aria-label="Blue-eyed population">50 / 100</output>
+            <svg id="blue-swarm" viewBox="0 0 340 240" role="img" aria-label="50 people with blue eyes"></svg>
+          </div>
+          <div class="entropy-plot">
+            <svg id="binary-entropy-plot" viewBox="0 0 640 640" role="img" aria-label="Binary entropy curve, with maximum one bit at p equals one half">
+              <path class="plot-axis" d="M56 20V588H612"/>
+              <path class="plot-guide" d="M56 32H612"/>
+              <text x="44" y="593" text-anchor="end">0</text><text x="44" y="38" text-anchor="end">1</text>
+              <text x="334" y="616" text-anchor="middle">½</text>
+              <text x="15" y="310" transform="rotate(-90 15 310)" text-anchor="middle">Entropy (measured in <tspan font-style="italic">bits</tspan>)</text><text x="633" y="593" text-anchor="middle" font-style="italic">p</text>
+              <path id="entropy-curve"/>
+              <path id="entropy-marker-guide" class="plot-guide"/>
+              <path id="entropy-horizontal-guide" class="plot-guide"/>
+              <circle id="binary-axis-marker" r="7" cx="334" cy="588" fill="#f6f3ed" stroke="#302e2b" stroke-width="2"/>
+              <circle id="entropy-marker" r="6" cx="334" cy="32"/>
+            </svg>
+          </div>
+          <div class="eye-population brown-population">
+            <output id="brown-ratio" aria-label="Brown-eyed population">50 / 100</output>
+            <svg id="brown-swarm" viewBox="0 0 340 240" role="img" aria-label="50 people with brown eyes"></svg>
+          </div>
+          <div class="population-tracker">
+            <div class="population-readout">
+              <div id="question-entropy-label">Entropy \(H(Y)\)<span class="readout-unit"><em>bits</em></span></div>
+              <output id="question-entropy" aria-labelledby="question-entropy-label">1.00</output>
+            </div>
+            <div class="population-readout">
+              <div id="remaining-label">Expected number of candidate \(X\) remaining after learning \(Y\)</div>
+              <output id="expected-population" aria-labelledby="remaining-label">50.00</output>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="slide content-panel definition-panel" id="binary-definition" data-title="Defining entropy" aria-labelledby="binary-definition-title">
+      <div class="slide-content">
+        <h2 id="binary-definition-title">The formula</h2>
+        <div class="annotated-entropy" id="binary-formula">
+          $$ H(Y) =\ \ 
+          \overbrace{\textcolor{#835b3f}{p}}^{\mathclap{\substack{\text{Probability of}\\\text{observing brown eyes}}}}
+          \,\underbrace{\ \log_2\left(\frac{1}{\textcolor{#835b3f}{p}}\right)}_{\mathclap{\substack{\text{Number of halvings}\\\text{of the candidate population}\\\text{upon observing brown eyes}}}}
+          \quad + \quad
+          \overbrace{\textcolor{#416f91}{(1-p)}}^{\mathclap{\substack{\text{Probability of}\\\text{observing blue eyes}}}}
+          \,\underbrace{\ \ \ \log_2\left(\frac{1}{\textcolor{#416f91}{1-p}}\right)}_{\mathclap{\substack{\text{Number of halvings}\\\text{of the candidate population}\\\text{upon observing blue eyes}}}}
+          $$
+        </div>
+        <div class="formula-steps">
+          <input id="binary-formula-step" type="range" min="1" max="4" step="1" value="1" aria-label="Reveal the binary entropy formula" aria-controls="binary-formula" aria-describedby="formula-step-description" disabled>
+          <div class="formula-step-ticks" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span></div>
+          <span id="formula-step-description" class="visually-hidden" aria-live="polite"></span>
+        </div>
+      </div>
+    </section>
+    <section class="slide content-panel definition-panel" id="conditional-entropy" data-title="Remaining uncertainty" aria-labelledby="conditional-entropy-title">
+      <div class="slide-content">
+        <h2 id="conditional-entropy-title" data-heading-lines><span>Remaining uncertainty</span> <span>and the Chain Rule</span></h2>
+        <div class="conditional-layout">
+          <div class="conditional-expression">
+            <div class="conditional-meaning">
+              <span class="conditional-term">\(H(X\mid Y)\;=\)</span>
+              <span class="conditional-description">
+                <span>remaining uncertainty</span>
+                <span>about</span>
+                <span>\(X\)</span>
+                <span>after learning</span>
+                <span>\(Y\)</span>
+              </span>
+            </div>
+          </div>
+          <p>Once you have learned the value of \(Y\), you carry on asking further questions. The remaining uncertainty that needs to be resolved is called the <i>conditional entropy</i>.</p>
+        </div>
+        <div class="conditional-layout chain-rule-layout">
+          <div class="conditional-expression conditional-expression-left">
+            <div class="chain-rule-formula"><span>\(H(X)=H(Y)\ +\)</span><span>\(H(X\mid Y)\)</span></div>
+          </div>
+          <p>Here \(Y\) is a feature of \(X\): knowing the person also tells us their eye colour. The <i>chain rule</i> splits the uncertainty in \(X\) into the uncertainty resolved by learning \(Y\), plus the uncertainty that remains. We can identify \(X\) in stages, and the average numbers of halvings add up.</p>
+        </div>
+      </div>
+    </section>
+    <section class="slide content-panel experiment-panel" id="ternary-interactive" data-title="Three outcomes" aria-labelledby="ternary-title">
+      <div class="slide-content ternary-content">
+        <h2 id="ternary-title">When two bins won't suffice</h2>
+        <div class="ternary-demo">
+          <div class="ternary-calculation">
+            <figure class="ternary-histogram">
+              <svg id="ternary-histogram" viewBox="0 0 320 300" preserveAspectRatio="none" role="img" aria-label="Eye-colour proportions from zero to one"></svg>
+            </figure>
+            <div id="ternary-entropy-label" class="visually-hidden">Entropy \(H(Y)\)</div>
+            <div class="ternary-calculation-line">
+              <span>\(H(Y)\)</span>
+              <div id="ternary-entropy-substitution" class="ternary-substitution" aria-label="Entropy calculation using the current proportions"></div>
+              <div class="ternary-entropy-result"><span aria-hidden="true">≈</span><output id="ternary-entropy" aria-labelledby="ternary-entropy-label">1.58</output><em>bits</em></div>
+            </div>
+          </div>
+          <div class="ternary-stage">
+            <svg id="ternary-surface" viewBox="-125 -25 1000 790" role="img" aria-label="Entropy above the triangle of brown, blue, and green probabilities. Click or drag within the base triangle to change the populations."></svg>
+            <div class="eye-population brown-population ternary-population" id="ternary-brown-population"><output id="ternary-brown-ratio" aria-label="Brown-eyed population">34 / 100</output><svg id="ternary-brown-swarm" viewBox="0 0 340 180" role="img" aria-label="34 people with brown eyes"></svg></div>
+            <div class="eye-population blue-population ternary-population" id="ternary-blue-population"><output id="ternary-blue-ratio" aria-label="Blue-eyed population">33 / 100</output><svg id="ternary-blue-swarm" viewBox="0 0 340 180" role="img" aria-label="33 people with blue eyes"></svg></div>
+            <div class="eye-population green-population ternary-population" id="ternary-green-population"><output id="ternary-green-ratio" aria-label="Green-eyed population">33 / 100</output><svg id="ternary-green-swarm" viewBox="0 0 340 180" role="img" aria-label="33 people with green eyes"></svg></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="slide chapter-panel" id="chapter-noise" data-title="2 — Noise" data-chapter="Noise" data-chapter-number="2" aria-labelledby="chapter-noise-title">
+      <div class="chapter-composition">
+        <div class="chapter-number" aria-hidden="true">2</div>
+        <span class="chapter-rule" aria-hidden="true"></span>
+        <h2 id="chapter-noise-title" class="chapter-tagline"><span class="visually-hidden">Chapter 2: </span>Noise</h2>
+      </div>
+    </section>
+    <section class="slide content-panel experiment-panel" id="learning-observation" data-title="Learning through observation" aria-labelledby="learning-observation-title">
+      <div class="slide-content observation-content">
+        <h2 id="learning-observation-title">Learning through observation</h2>
+        <p>Imagine trying to learn a data distribution through repeated observation.</p>
+        <canvas id="observation-samples" width="1200" height="1037" role="img" aria-label="Uniform random observations gradually revealing the Blue Jays silhouette"></canvas>
+      </div>
+    </section>
+    <section class="slide content-panel experiment-panel noise-panel" id="noise-sampling" data-title="Life is messy" aria-labelledby="noise-sampling-title">
+      <div class="slide-content silhouette-content">
+        <h2 id="noise-sampling-title">Life is messy</h2>
+        <p>In reality, this process is imperfect — data is corrupted or measurements are imprecise. The result is noise, represented as random perturbations of the signal.</p>
+        <div class="silhouette-pair">
+          <figure><canvas id="silhouette-samples" width="750" height="648" role="img" aria-label="Uniform random points inside the Blue Jays silhouette"></canvas></figure>
+          <figure><canvas id="silhouette-noise" width="750" height="648" role="img" aria-label="Independent two-dimensional Gaussian noise samples"></canvas></figure>
+          <figure><canvas id="silhouette-sum" width="750" height="648" role="img" aria-label="Pairwise sums of the signal and noise samples"></canvas></figure>
+        </div>
+      </div>
+    </section>
+    <section class="slide content-panel definition-panel" id="conditional-epi" data-title="Entropy Power Inequality" aria-labelledby="conditional-epi-title">
+      <div class="slide-content epi-content">
+        <h2 id="conditional-epi-title">The Entropy Power Inequality</h2>
+        <p>The difficulty in recovering the true signal can be quantified using entropy. We want to learn \(X\) from the perturbed signal \(X+Z\). The inherent uncertainty is measured by \(H(X\mid X+Z)\).</p>
+        <p>Adding noise blurs the signal; EPI limits how much uncertainty can remain behind that blur.</p>
+        <p>Let \(X,Z\in\mathbb R^d\) be independent random vectors with <i>sufficiently nice</i> probability densities. Then there is an entropy constraint</p>
+        <div class="epi-bound epi-sequence" role="group" aria-label="H of X given X plus Z is at most half the sum of the entropies of X and Z, minus d over two.">
+          <span class="epi-reveal" style="--reveal-step: 0" aria-hidden="true">\(\displaystyle H(X\mid X+Z)\)</span>
+          <span class="epi-reveal" style="--reveal-step: 1" aria-hidden="true">\(\displaystyle \le\)</span>
+          <span class="epi-reveal" style="--reveal-step: 2" aria-hidden="true">\(\displaystyle \frac{H(X)+H(Z)}{2}\)</span>
+          <span class="epi-reveal" style="--reveal-step: 3" aria-hidden="true">\(\displaystyle -\textcolor{#795585}{\frac d2}.\)</span>
+        </div>
+        <aside class="dimension-callout epi-reveal" style="--reveal-step: 4" aria-labelledby="dimension-callout-title">
+          <h3 id="dimension-callout-title"><span>The <em>blessing</em> of dimensionality!?!</span></h3>
+          <p>The entropy of the noise acts like a budget. It can heavily obscure a few directions, but at a fixed budget, it cannot do so to every direction.</p>
+        </aside>
+      </div>
+    </section>
+    <section class="slide content-panel question-panel" id="chapter-dimensionality" data-title="Dimensionality: not all it's cracked up to be..." aria-labelledby="chapter-dimensionality-title">
+      <div class="slide-content">
+        <h2 id="chapter-dimensionality-title">Dimensionality. Not all it's cracked up to be...</h2>
+      </div>
+    </section>
+    <section class="slide content-panel definition-panel" id="discrete-dimension" data-title="Discrete data and dimension" aria-labelledby="discrete-dimension-title">
+      <div class="slide-content">
+        <h2 id="discrete-dimension-title">Masquerading in many dimensions</h2>
+        <p>Discrete data might appear \(d\)-dimensional, but that doesn't mean it is. If the distinguishing features lie in far fewer dimensions, a limited noise budget might still be enough to obscure them all.</p>
+        <img class="data-curve-illustration" src="assets/data-curve-fine-transparent.png" alt="Engraved three-dimensional coordinate diagram with discrete data points arranged along a single winding spatial curve." width="1536" height="1024" loading="lazy">
+        
+      </div>
+    </section>
+    <section class="slide content-panel experiment-panel noise-panel" id="horizontal-comparison" data-title="One-dimensional noise" aria-labelledby="horizontal-noise-title">
+      <div class="slide-content silhouette-content">
+        <h2 id="horizontal-noise-title">One-dimensional noise</h2>
+        <p class="noise-entropy-note">Matched numerical entropy: \(H(T)=H(Z)\). Here \(L=T(\cos\theta,\sin\theta)\), with \(\sigma_T\approx66.1\) and \(\sigma_Z=4\) in the original image coordinates. The scale matches the two-dimensional example; points outside the view are not plotted.</p>
+        <div class="silhouette-pair">
+          <figure><canvas id="horizontal-samples" width="750" height="648" role="img" aria-label="Uniform random points inside the Blue Jays silhouette"></canvas></figure>
+          <figure class="rotatable-noise"><canvas id="horizontal-noise" width="750" height="648" role="img" aria-label="One-dimensional Gaussian noise samples with adjustable direction"></canvas><svg id="noise-angle-guide" viewBox="0 0 750 648" role="slider" tabindex="0" aria-label="Noise direction; drag the circular guide to rotate" aria-valuemin="0" aria-valuemax="359" aria-valuenow="45"></svg></figure>
+          <figure><canvas id="horizontal-sum" width="750" height="648" role="img" aria-label="Pairwise sums of the signal and noise samples"></canvas></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide chapter-panel" id="chapter-boolean" data-title="3 — Boolean vectors" data-chapter="Boolean vectors" data-chapter-number="3" aria-labelledby="chapter-boolean-title">
+      <div class="chapter-composition">
+        <div class="chapter-number" aria-hidden="true">3</div>
+        <span class="chapter-rule" aria-hidden="true"></span>
+        <h2 id="chapter-boolean-title" class="chapter-tagline"><span class="visually-hidden">Chapter 3: </span>Boolean vectors</h2>
+      </div>
+    </section>
+    <section class="slide content-panel definition-panel" id="boolean-cube" data-title="Guess Who, again" aria-labelledby="boolean-cube-title">
+      <div class="slide-content kids-story-layout">
+        <div class="kids-story-copy">
+        <h2 id="boolean-cube-title">Guess Who, again</h2>
+        <p>I like to imagine playing Guess Who with my two boys, who are six and two. The older boy answers honestly, while the younger is unreliable. But the little one will freak out if I ignore his answers, so I agree to take <strong>the average of their answers</strong>.</p>
+        <p>So the big guy gives reliable data, while the younger child independently chooses their own answer according to some mysterious logic. I get to see only the averages, \((X+Y)/2\). I still want to win, and I would like to know just how hard it's going to be...</p>
+        </div>
+        <img class="voting-card-illustration" src="assets/blue-eyes-voting-card.png" alt="A voting card asking Blue eyes?, with both the Yes and No checkboxes marked." loading="lazy">
+      </div>
+    </section>
+    <section class="slide content-panel definition-panel" id="boolean-cube-definition" data-title="The Boolean Cube" aria-labelledby="boolean-cube-definition-title">
+      <div class="slide-content">
+        <h2 id="boolean-cube-definition-title">The Boolean Cube</h2>
+        <p>Do they wear glasses? A hat? Have blue eyes? When data is understood through binary questions, the resulting feature vectors are represented by a vertex of the <strong>Boolean cube</strong>.</p>
+        <div class="epi-bound">$$X=(X_1,\ldots,X_d)\in\{0,1\}^d.$$</div>
+        <img class="boolean-tree-diagram" src="assets/boolean-decision-tree.svg" alt="A three-level decision tree asks about glasses, a hat, and blue eyes. Its eight leaves correspond by matching colours and binary labels to the eight vertices of a cube." width="1120" height="400">
+      </div>
+    </section>
+    <section class="slide content-panel definition-panel" id="additive-collisions" data-title="Disagreement and collisions" aria-labelledby="additive-collisions-title">
+      <div class="slide-content">
+        <h2 id="additive-collisions-title">Disagreement creates uncertainty</h2>
+        <div class="collision-equation">$$0+1=1+0$$</div>
+        <p>This simple equation captures the gist of the problem. When the boys agree, I can be sure of the honest answer. Disagreement, however, leaves me guessing</p>
+        <p>The challenge of denoising is that the signal can break into truth and noise in multiple ways, and we can't tell which actually happened.</p>
+        <div class="epi-bound">$$x+y=x'+y'$$</div>
+        <p>Mathematicians call these are <strong>additive quadruples</strong>. These help clear up the role of dimension: competing explanations must cause a collision of <em>each feature simultaneously</em>.       </div>
+    </section>
+    <section class="slide content-panel definition-panel" id="boolean-theorem" data-title="The Boolean theorem" aria-labelledby="boolean-theorem-title">
+      <div class="slide-content">
+        <h2 id="boolean-theorem-title">An EPI for the cube</h2>
+        <p>Mercifully, the Boolean cube isn't allowed to concentrate in fewer dimensions without causing its entropy to collapse. This allows us to recover EPI-type estimates.</p>
+        <p>Suppose \(X,Y\in\{0,1\}^d\) are independent random vectors, distributed on the vertices of the cube however you like. With ordinary coordinatewise addition, we get the inequality</p>
+        <div class="epi-bound boolean-bound">$$H\left(X\mid \frac{X+Y}{2}\right)\le\frac{H(X)+H(Y)}4.$$</div>
+        </div>
+    </section>
+    <section class="slide content-panel experiment-panel" id="cube-averages" data-title="Averaging Boolean cubes" aria-labelledby="cube-averages-title">
+      <div class="slide-content cube-average-content">
+        <h2 id="cube-averages-title">Two draws, one average: the theorem in action</h2>
+        <div class="cube-demo-layout">
+          <div class="cube-average-grid">
+            <div class="cube-input cube-input-x">
+              <h3>\(X\)</h3>
+              <svg id="cube-x-entropy" class="cube-entropy-gauge" viewBox="0 0 240 150" role="img" aria-label="Empirical entropy of X; waiting for samples"></svg>
+              <svg id="cube-x-plot" class="probability-cube" viewBox="0 0 360 350" role="img" aria-label="Cube X, with eight adjustable vertex probabilities"></svg>
+              <fieldset class="cube-equalizer" id="cube-x-equalizer"><legend class="visually-hidden">Vertex probabilities for X, in percent</legend></fieldset>
+              <button class="cube-uniform" id="cube-x-uniform" type="button">Reset X to uniform</button>
+            </div>
+            <div class="cube-input cube-input-y">
+              <h3>\(Y\)</h3>
+              <svg id="cube-y-entropy" class="cube-entropy-gauge" viewBox="0 0 240 150" role="img" aria-label="Empirical entropy of Y; waiting for samples"></svg>
+              <svg id="cube-y-plot" class="probability-cube" viewBox="0 0 360 350" role="img" aria-label="Cube Y, with eight adjustable vertex probabilities"></svg>
+              <fieldset class="cube-equalizer" id="cube-y-equalizer"><legend class="visually-hidden">Vertex probabilities for Y, in percent</legend></fieldset>
+              <button class="cube-uniform" id="cube-y-uniform" type="button">Reset Y to uniform</button>
+            </div>
+            <div class="cube-output">
+              <h3>\(Z=(X+Y)/2\)</h3>
+              <svg id="cube-z-entropy" class="cube-entropy-gauge" viewBox="0 0 240 150" role="img" aria-label="Empirical entropy of Z; waiting for samples"></svg>
+              <svg id="cube-z-plot" class="probability-cube" viewBox="0 0 360 350" role="img" aria-label="Accumulated samples of the average on the cube"></svg>
+            </div>
+          </div>
+        </div>
+        <noscript><p>Enable JavaScript to adjust the probabilities and run the sampling.</p></noscript>
+      </div>
+    </section>
+    <section class="slide content-panel experiment-panel" id="bernoulli-proof" data-title="The Bernoulli case" aria-labelledby="bernoulli-proof-title">
+      <div class="slide-content">
+        <h2 id="bernoulli-proof-title">One feature, two Bernoulli variables</h2>
+        <p>For a single question, each answer is modelled by the toss of a (possibly unfair) coin. The quantity we are tracking is</p>
+        <div class="gap-formula">\(\frac14 H(X)+\frac14H(Y)-H(X\mid X+Y)\)</div>
+        <p>and the assertion is that it is non-negative. You can observe this by tweaking the odds of \(X\) and \(Y\) on the graph below.</p>
+        <div class="bernoulli-demo">
+          <figure class="bernoulli-figure">
+            <svg id="bernoulli-surface" viewBox="0 0 660 570" role="img" aria-label="Surface of the Bernoulli inequality gap over probabilities p and q"></svg>
+          </figure>
+          <div class="bernoulli-graphs">
+            <figure><figcaption>\(H(X)\)</figcaption><svg id="bernoulli-hx-graph" viewBox="0 0 360 150" role="img" aria-label="Entropy of X as a function of p"></svg></figure>
+            <figure><figcaption>\(H(Y)\)</figcaption><svg id="bernoulli-hy-graph" viewBox="0 0 360 150" role="img" aria-label="Entropy of Y as a function of q"></svg></figure>
+            <figure><figcaption>\(H(X\mid X+Y)\)</figcaption><svg id="bernoulli-hconditional-graph" viewBox="0 0 360 150" role="img" aria-label="Conditional entropy as p varies with the selected q held fixed"></svg></figure>
+          </div>
+        </div>
+        <p class="vector-reduction">The \(d\)-dimensional result follows this by handling <em>one coordinate at a time</em> and using the Chain Rule.</p>
+      </div>
+    </section>
+    <section class="slide chapter-panel" id="chapter-classification" data-title="4 — The classification problem" data-chapter="Classification" data-chapter-number="4" aria-labelledby="chapter-classification-title">
+      <div class="chapter-composition">
+        <div class="chapter-number" aria-hidden="true">4</div>
+        <span class="chapter-rule" aria-hidden="true"></span>
+        <h2 id="chapter-classification-title" class="chapter-tagline"><span class="visually-hidden">Chapter 4: </span>The classification problem</h2>
+      </div>
+    </section>
+    <section class="slide content-panel folio-panel" id="littlewood" data-title="Understanding extremizers" aria-labelledby="littlewood-title">
+      <div class="slide-content">
+        <h2 id="littlewood-title" class="folio-title">Understanding extremes</h2>
+        <div class="littlewood-body">
+          <img class="littlewood-portrait" src="assets/littlewood-engraved-cream.png" alt="Engraved portrait of John Edensor Littlewood wearing round spectacles, a suit and tie." width="1137" height="1383" loading="lazy">
+          <figure class="littlewood-quotation">
+            <blockquote>“It can pay to find out what is the worst enemy of what you want to prove, and then induce him to change sides.”</blockquote>
+            <figcaption><span class="littlewood-attribution">J. E. Littlewood<br><a href="https://www.genealogy.math.ndsu.nodak.edu/id.php?id=193516" target="_blank" rel="noopener noreferrer">(my great grandpa)</a></span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+    <section class="slide content-panel definition-panel" id="equality-cases" data-title="The equality cases" aria-labelledby="equality-cases-title">
+      <div class="slide-content">
+        <h2 id="equality-cases-title">Predicting the shape of the noise</h2>
+        <p>One of the perks of entropy is that it lets us understand when equality occurs in the estimate. It turns out to only happen under very precise conditions: both random variables must be indentically distributed and uniform on subcubes. This means that some features are <b>fair coin tosses</b>, while <b>all others are fixed, a copy of a free bit, or its opposite.</b></p>
+        <p style="font-style: italic; text-align: center;">To make my life most difficult, my kids must conspire perfectly!</p>
+      </div>
+    </section>
+    <section class="slide content-panel definition-panel" id="stability" data-title="From equality to stability" aria-labelledby="stability-title">
+      <div class="slide-content">
+        <h2 id="stability-title">What remains</h2>
+        <p>That classification is super rigid, but is it robust? What we would really like to know is if the zoo of distributions contains any other dangerous beasts:</p>
+        <p style="font-style: italic; font-size: 40px; text-align: center;">When \(H(X|X+Y)\) is <i>nearly</i> as large as \(\frac14 H(X)+\frac14H(Y)\), <br>are \(X\) and \(Y\) nearly uniform on a cube?</p>
+        <p class="simulation-return"><a href="#cube-averages">Play around and find out...</a></p>
+      </div>
+    </section>
+  </main>
+  <nav class="section-navigation" aria-label="Presentation sections" hidden>
+    <span class="chapter-label" aria-hidden="true"></span>
+    <button class="section-arrow" id="previous-section" type="button" aria-label="Previous section">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 15L12 8L19 15"/></svg>
+    </button>
+    <ol class="section-timeline"></ol>
+    <span class="section-count" aria-hidden="true">1 / 2</span>
+    <button class="section-arrow" id="next-section" type="button" aria-label="Next section">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 9L12 16L19 9"/></svg>
+    </button>
+  </nav>
+</body>
+</html>
